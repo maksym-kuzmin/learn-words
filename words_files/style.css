@@ -1,0 +1,225 @@
+@font-face {
+    font-family: Oswald;
+    src: url('../fonts/oswald-regular.woff2') format('woff2'),
+         url('../fonts/oswald-regular.ttf') format('ttf'),
+         url('../fonts/oswald-regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: Oswald;
+    src: url('../fonts/oswald-medium.woff2') format('woff2'),
+         url('../fonts/oswald-medium.ttf') format('ttf'),
+         url('../fonts/oswald-medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+
+body{
+    min-height: 100vh;
+    margin: 0;
+    background: #bdcaca;
+    background: linear-gradient(to top left, #bdcaca, #528585);
+
+    font-family: Oswald, sans-serif;
+    font-weight: 400;
+}
+
+.nav-menu{
+    min-height: 60px; 
+    background-color: #6b6b6b;   
+    color:#ffffff; 
+}
+
+.nav-menu__center{
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    text-align: right;
+    font-size: 0px;
+}
+
+.nav-menu__link{
+    display:inline-block;    
+    padding: 8px 20px;
+    background-color: #6b6b6b;
+    cursor: pointer;
+    transition: background-color 0.5s;
+
+    font-size: 35px;
+    line-height: 44px;    
+    text-decoration: none;
+    color:#ffffff;
+}
+
+.nav-menu__link:hover{
+    background-color: #575555;
+    transition: 0.5s;
+}
+
+.nav-menu__link--active,
+.nav-menu__link--active:hover{
+    background-color: #494848;
+    cursor: default;
+}
+
+.nav-menu__link--disable:hover{
+    background-color: #6b6b6b;
+    cursor: default;
+}
+
+.nav-menu__lessons{  
+    display: none;  
+    position: absolute;
+    z-index: 5;
+    right: 0;
+    top: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #6b6b6b; 
+
+    font-size: 18px;
+    line-height: 22px;
+    list-style: none;
+    text-align: left;
+}
+
+.nav-menu__lesson{
+    padding: 5px 20px;
+    cursor: pointer;
+    transition: background-color 0.5s;
+}
+
+.nav-menu__lesson:hover{
+    background-color: #575555;
+    transition: 0.5s;
+}
+
+.nav-menu__lesson--active,
+.nav-menu__lesson--active:hover{
+    background-color: #494848;
+    cursor: default;
+}
+
+
+
+.translating{
+    text-align: center;
+    padding: 50px 0 0;
+}
+
+.translating--disable{
+    display: none;
+}
+
+.translating__task,
+.translating__ansver{
+    min-height: 65px;
+    margin: 20px 0 0;
+
+    font-size: 50px;
+    line-height: 65px;
+    font-weight: 500;
+}
+
+.translating__ansver-verb{
+    display: inline-block;
+    width: 30%;
+    margin: 20px auto;
+}
+
+.translating__ansver--right{
+    color: #0d5506
+}
+
+.translating__ansver--wrong{
+    color: #490808
+}
+
+.translating__input{
+    display: block;
+    width: 700px;
+    margin: 20px auto;
+    padding: 10px;
+    border-radius: 5px;
+
+    font-size: 40px;
+    text-align: center;
+}
+
+.translating__verb-input{
+    display: inline-block;
+    width: 30%;
+    margin: 20px 0;
+}
+
+.translating__btn{
+    display: block;
+    width: 250px;
+    margin: 20px auto;
+    padding: 10px 0;
+    background-color: rgb(209, 217, 223);
+    transition: background-color 0.5s;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 40px;
+}
+
+.translating__btn:hover{
+    background-color: rgb(188, 195, 201);
+    transition: 0.5s;
+}
+
+@media screen and (max-width: 900px){
+    .nav-menu__link{           
+        padding: 14px 20px;        
+        font-size: 25px;
+        line-height: 32px;           
+    }
+
+    .translating{        
+        padding-top: 20px;
+    }
+
+    .translating__task,
+    .translating__ansver{
+        min-height: 40px;       
+
+        font-size: 30px;
+        line-height: 40px;        
+    }
+
+    .translating__input{        
+        width: auto;        
+        padding: 5px;        
+    
+        font-size: 25px;        
+    }
+
+    .translating__verb-input{
+        display: block;
+        width: auto;  
+        max-width: 90%;
+        margin: 20px auto;
+    }
+
+    .translating__btn{        
+        width: 150px;
+        margin: 10px auto;
+        padding: 5px 0;        
+        font-size: 25px;
+    }
+}
+
+@media screen and (max-width: 600px){
+    .translating__ansver-verb{
+        display: block;
+        width: auto;
+        margin: 20px 0 0;
+        text-align: center;
+    }
+}
+
+

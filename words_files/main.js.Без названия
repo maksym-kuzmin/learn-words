@@ -1,0 +1,241 @@
+$(function(){
+
+    var animation_speed = 300;
+    
+    var en_ru_page = document.getElementById("en-ru");
+    var ru_en_page = document.getElementById("ru-en");
+    var verbs_page = document.getElementById("verbs");   
+
+    var menu_links = document.getElementsByClassName("nav-menu__link");
+    var menu_lessons = document.getElementsByClassName("nav-menu__lessons")[0];
+    var lessons = document.getElementsByClassName("nav-menu__lesson");
+
+    var active_page = null;
+    var active_menu = null;
+    var active_lesson_id = "all";
+
+    var verbs = null;
+    var words = null;
+    var current_word = 0;
+    
+    menu_links[0].addEventListener("click", function(e){
+        e.preventDefault();
+        if(!this.classList.contains("nav-menu__link--active")){
+            activateMenu(this, verbs_page);
+            activateLessons(false);
+            initialDictionaryVerbs();
+        }        
+    }, false);
+
+    menu_links[1].addEventListener("click", function(e){
+        e.preventDefault();
+        if(!this.classList.contains("nav-menu__link--active")){
+            activateMenu(this, ru_en_page);
+            activateLessons(true);    
+            initialDictionary(); 
+        }  
+    }, false);
+
+    menu_links[2].addEventListener("click", function(e){
+        e.preventDefault();
+        if(!this.classList.contains("nav-menu__link--active")){
+            activateMenu(this, en_ru_page);
+            activateLessons(true);  
+            initialDictionary();  
+        }   
+    }, false);
+
+    function activateLessons(need){
+        if(need){
+            menu_links[3].classList.remove("nav-menu__link--disable"); 
+            menu_links[3].addEventListener("click", lessonsClick, false);
+        }else{
+            menu_links[3].classList.add("nav-menu__link--disable");
+            menu_links[3].removeEventListener("click", lessonsClick, false);
+        }
+    }
+
+    function lessonsClick(e){        
+        e.preventDefault();
+        $(menu_lessons).slideToggle(animation_speed);
+    }
+
+    function activateMenu(menu, page){
+        deactivateMenu();
+        active_menu = menu;
+        active_page = page;
+        menu.classList.add("nav-menu__link--active");
+        page.classList.remove("translating--disable");
+        $(menu_lessons).slideUp(animation_speed);
+    }
+
+    function deactivateMenu(){
+        if(active_menu != null){
+            active_menu.classList.remove("nav-menu__link--active");
+        }
+        
+        if(active_page != null){
+            active_page.classList.add("translating--disable");
+        }       
+    }
+
+    $(lessons).click(function(){
+        if(active_lesson_id != null){
+            document.getElementById(active_lesson_id).classList.remove("nav-menu__lesson--active");
+        }
+        active_lesson_id = this.id;
+        this.classList.add("nav-menu__lesson--active");
+        initialDictionary();
+        $(menu_lessons).slideUp(animation_speed);
+    });
+
+    function initialDictionary(){
+        current_word = 0;
+        var temp = [];
+        for(var i = 0; i < db_words.length; i++){
+            if(active_lesson_id == "all" || active_lesson_id == db_words[i].lesson_id){
+                temp.push(db_words[i]);
+            }
+        }
+        words = createRandom(temp);  
+        if(active_page == en_ru_page){
+            startEnRuTest();
+        }else{
+            startRuEnTest();
+        }      
+    }
+
+    function initialDictionaryVerbs(){
+        current_word = 0;
+        var temp = [];
+        for(var i = 0; i < db_verbs.length; i++){
+            temp.push(db_verbs[i]);            
+        }
+        verbs = createRandom(temp);
+        startTestVerbs();
+    }
+
+    function createRandom(dictionary){
+        var temp = [];
+        var size = dictionary.length;
+        for(var j = 0; j < size; j++){
+            var i = Math.floor(Math.random() * (dictionary.length));
+            temp.push(dictionary.splice(i, 1)[0]);
+        }        
+        return temp;
+    }
+
+    function startEnRuTest(){        
+        var question = en_ru_page.getElementsByClassName("translating__task")[0];
+        var answer = en_ru_page.getElementsByClassName("translating__ansver")[0];
+        var btn = en_ru_page.getElementsByClassName("translating__btn")[0];
+
+        var go_next = false;
+        question.innerHTML = words[current_word].name_en;
+        answer.innerHTML = "";        
+        btn.innerHTML = "Translate";
+
+        btn.onclick = function(e){
+            e.preventDefault
+            if(go_next){
+                current_word++;
+                if(current_word == words.length){
+                    initialDictionary();
+                }else{
+                    question.innerHTML = words[current_word].name_en;
+                    answer.innerHTML = "";        
+                    btn.innerHTML = "Translate";
+                }                   
+            }else{
+                answer.innerHTML = words[current_word].name_ru;
+                btn.innerHTML = "Next";                
+            }
+            go_next = !go_next;
+        };
+    }
+
+    function startRuEnTest(){
+        var question = ru_en_page.getElementsByClassName("translating__task")[0];
+        var my_answer = ru_en_page.getElementsByClassName("translating__input")[0];
+        var answer = ru_en_page.getElementsByClassName("translating__ansver")[0];
+        var btn = ru_en_page.getElementsByClassName("translating__btn")[0];
+
+        var go_next = false;
+        question.innerHTML = words[current_word].name_ru;
+        answer.innerHTML = "";
+        answer.classList.remove("translating__ansver--right");
+        answer.classList.remove("translating__ansver--wrong");
+        my_answer.value = "";        
+        btn.innerHTML = "Translate";
+
+        btn.onclick = function(e){
+            e.preventDefault
+            if(go_next){
+                current_word++;
+                if(current_word == words.length){
+                    initialDictionary();
+                }else{
+                    question.innerHTML = words[current_word].name_ru;
+                    answer.innerHTML = "";
+                    answer.classList.remove("translating__ansver--right");
+                    answer.classList.remove("translating__ansver--wrong");
+                    my_answer.value = "";        
+                    btn.innerHTML = "Translate";
+                }                   
+            }else{
+                addRight(words[current_word].name_en, my_answer.value, answer);                
+                btn.innerHTML = "Next";                
+            }
+            go_next = !go_next;
+        };
+    }
+
+    function startTestVerbs(){
+        var question = verbs_page.getElementsByClassName("translating__task")[0];
+        var my_answer = verbs_page.getElementsByClassName("translating__input");
+        var answers = verbs_page.getElementsByClassName("translating__ansver");
+        var btn = verbs_page.getElementsByClassName("translating__btn")[0];
+
+        var go_next = false;
+        question.innerHTML = verbs[current_word].name_ru;        
+        $(answers).html("")
+                .removeClass("translating__ansver--right")
+                .removeClass("translating__ansver--wrong");        
+        $(my_answer).val("");        
+        btn.innerHTML = "Translate";
+
+        btn.onclick = function(e){
+            e.preventDefault
+            if(go_next){
+                current_word++;
+                if(current_word == verbs.length){
+                    initialDictionaryVerbs();
+                }else{
+                    question.innerHTML = verbs[current_word].name_ru;        
+                    $(answers).html("")
+                            .removeClass("translating__ansver--right")
+                            .removeClass("translating__ansver--wrong");        
+                    $(my_answer).val("");      
+                    btn.innerHTML = "Translate";
+                }                   
+            }else{
+                addRight(verbs[current_word].form1, my_answer[0].value, answers[0]);
+                addRight(verbs[current_word].form2, my_answer[1].value, answers[1]);
+                addRight(verbs[current_word].form3, my_answer[2].value, answers[2]);
+                
+                btn.innerHTML = "Next";                
+            }
+            go_next = !go_next;
+        };        
+    }
+
+    function addRight(word, my_word, element){
+        element.innerHTML = word;
+            if(my_word == word){
+                element.classList.add("translating__ansver--right");
+            }else{
+                element.classList.add("translating__ansver--wrong");
+            }
+    }  
+})
+
