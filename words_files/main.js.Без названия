@@ -1,3 +1,5 @@
+var  soundText;
+
 $(function(){
 
     var animation_speed = 300;
@@ -237,5 +239,9 @@ $(function(){
                 element.classList.add("translating__ansver--wrong");
             }
     }  
+
+    soundText = function() {
+       responsiveVoice.speak(words[current_word].name_en, "UK English Female");
+    }
 })
 
